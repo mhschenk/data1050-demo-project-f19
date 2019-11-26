@@ -33,7 +33,8 @@ def page_header():
                href='https://github.com/blownhither/'),
     ], className="row")
 
-
+#this is the static description at the beginning of the webpage; the function returns the contents of the markdown cell, foramtted
+#according to markdown rules
 def description():
     """
     Returns overall project description in markdown
@@ -109,24 +110,26 @@ def what_if_description():
     ], className="row")
 
 
+#a more complicated part of the webpage
+
 def what_if_tool():
     """
     Returns the What-If tool as a dash `html.Div`. The view is a 8:3 division between
     demand-supply plot and rescale sliders.
     """
     return html.Div(children=[
-        html.Div(children=[dcc.Graph(id='what-if-figure')], className='nine columns'),
+        html.Div(children=[dcc.Graph(id='what-if-figure')], className='nine columns'), #left part of the figure, 9 columns
 
-        html.Div(children=[
-            html.H5("Rescale Power Supply", style={'marginTop': '2rem'}),
+        html.Div(children=[ #right part of the figure; 3 columns, more complicated structure
+            html.H5("Rescale Power Supply", style={'marginTop': '2rem'}), #header
             html.Div(children=[
-                dcc.Slider(id='wind-scale-slider', min=0, max=4, step=0.1, value=2.5, className='row',
+                dcc.Slider(id='wind-scale-slider', min=0, max=4, step=0.1, value=2.5, className='row',#slider
                            marks={x: str(x) for x in np.arange(0, 4.1, 1)})
             ], style={'marginTop': '5rem'}),
 
-            html.Div(id='wind-scale-text', style={'marginTop': '1rem'}),
+            html.Div(id='wind-scale-text', style={'marginTop': '1rem'}), #header
 
-            html.Div(children=[
+            html.Div(children=[ #slider
                 dcc.Slider(id='hydro-scale-slider', min=0, max=4, step=0.1, value=0,
                            className='row', marks={x: str(x) for x in np.arange(0, 4.1, 1)})
             ], style={'marginTop': '3rem'}),
@@ -162,6 +165,7 @@ def architecture_summary():
 
 
 # Sequentially add page components to the app's layout
+#this is the overall layout of the whole webpage
 
 
 app.layout = html.Div([
@@ -196,7 +200,8 @@ def update_hydro_sacle_text(value):
 
 _what_if_data_cache = None
 
-
+#this is a decorator; the inputs are set within the web app; the inputs then go into the function below
+#an event happens (slider is changed); decorator determines what is done after that event
 @app.callback(
     dash.dependencies.Output('what-if-figure', 'figure'),
     [dash.dependencies.Input('wind-scale-slider', 'value'),
